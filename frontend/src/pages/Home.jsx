@@ -1,20 +1,61 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { getTasks, getFilteredTasks } from "../services/taskService";
 import Empty from "../components/Empty";
 import Loader from "../components/Loader";
-import GenericError from "../components/Genericerror";
+import GenericError from "../components/GenericError";
 import TaskCard from "../components/TaskCard";
 import Filters from "../components/filters/Filters";
+import CreateTaskButton from "../components/CreateTaskButton";
 
 const Home = () => {
     const navigate = useNavigate();
     const [menuVisible, setMenuVisible] = useState(false);
+    const [tasks, setTasks] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [filters, setFilters] = useState({
+        status: "",
+        expireDate: "",
+        search: "",
+    });
+
+    // Función para obtener tareas filtradas
+    const fetchFilteredTasks = async (filters) => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await getFilteredTasks(filters);
+            setTasks(data); // Actualizar las tareas con los resultados filtrados
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    const fetchTasks = async () => {
+        setLoading(true);
+        setError(null);
+        try {
+            const data = await getTasks();
+            setTasks(data);
+        } catch (error) {
+            setError(error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchTasks();
+    }, []);
 
     const toggleMenu = () => setMenuVisible(!menuVisible);
 
     const handleOptionClick = (option) => {
         console.log(option);
-        setMenuVisible(false); // Oculta el menú después de hacer clic
+        setMenuVisible(false);
     };
 
     return (
@@ -26,7 +67,7 @@ const Home = () => {
                         src="https://media.lordicon.com/icons/wired/lineal/44-avatar-user-in-circle.svg"
                         alt="Avatar"
                         className="w-12 h-12 rounded-full cursor-pointer"
-                        onClick={toggleMenu} // Muestra/oculta el menú
+                        onClick={toggleMenu}
                     />
                     {menuVisible && (
                         <div className="absolute top-16 right-0 bg-white text-[#007074] rounded-lg shadow-lg w-40">
@@ -48,15 +89,23 @@ const Home = () => {
                     )}
                 </div>
             </div>
-            {/* <Empty/> */}
-            {/* <Loader/> */}
-            {/* <GenericError errorMessage="Ha ocurrido un error al cargar las tareas" /> */}
-            <Filters />
+            {!loading && !error && tasks.length > 0 && <Filters filters={filters} setFilters={setFilters} fetchFilteredTasks={fetchFilteredTasks} />}
+            {tasks.length > 0 && (
+                <div className="flex justify-end px-27 mb-4">
+                    <CreateTaskButton refreshTasks={fetchTasks} />
+                </div>
+            )}
+
             <div className="flex justify-center flex-wrap gap-4 px-6">
-                <TaskCard />
-                <TaskCard />
-                <TaskCard />
-                <TaskCard />
+                {loading ? (
+                    <Loader />
+                ) : error ? (
+                    <GenericError errorMessage="Ha ocurrido un error al cargar las tareas" />
+                ) : tasks.length === 0 ? (
+                    <Empty refreshTasks={fetchTasks} />
+                ) : (
+                    tasks.map((task) => <TaskCard key={task._id} task={task} refreshTasks={fetchTasks} />)
+                )}
             </div>
         </div>
     );
