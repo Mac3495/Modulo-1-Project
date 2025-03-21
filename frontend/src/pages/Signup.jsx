@@ -71,7 +71,7 @@ const Signup = () => {
                     <button
                         type="button"
                         className="w-full text-[#007074] underline mt-4"
-                        onClick={() => navigate("/login")}
+                        onClick={() => navigate("/")}
                     >
                         Iniciar sesión
                     </button>

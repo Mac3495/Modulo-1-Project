@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 const GenericError = () => {
   const navigate = useNavigate();
   const handleRetry = () => {
-    navigate("/login")
+    navigate("/")
   };
 
   return (

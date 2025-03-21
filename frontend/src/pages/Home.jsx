@@ -80,7 +80,7 @@ const Home = () => {
                                 </li>
                                 <li
                                     className="px-4 py-2 hover:bg-gray-200 cursor-pointer"
-                                    onClick={() => navigate("/login")}
+                                    onClick={() => navigate("/")}
                                 >
                                     Cerrar sesión
                                 </li>
