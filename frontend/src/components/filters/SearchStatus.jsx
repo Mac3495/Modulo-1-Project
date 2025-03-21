@@ -1,21 +1,28 @@
 import { useState } from "react";
 
-const SearchStatus = () => {
-  const [status, setStatus] = useState("");
+const SearchStatus = ({ filters, setFilters, fetchFilteredTasks }) => {
   const [isOpen, setIsOpen] = useState(false);
 
   // Mapeo entre los valores visibles y los valores internos
   const statusOptions = {
     "Pendiente": "pending",
     "En proceso": "in-progress",
-    "Completado": "complete",
+    "Completado": "completed",
   };
 
   const handleChange = (visibleStatus) => {
     const internalStatus = statusOptions[visibleStatus]; // Obtener el valor interno
-    setStatus(visibleStatus); // Mostrar el valor visible
-    console.log(internalStatus); // Mostrar el valor interno en consola
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      status: internalStatus, // Actualizar el filtro de status
+    }));
     setIsOpen(false); // Cerrar el menú después de seleccionar
+
+    // Llamar a la función de filtrado
+    fetchFilteredTasks({
+      ...filters,
+      status: internalStatus, // Actualizar status en los filtros
+    });
   };
 
   const toggleMenu = () => {

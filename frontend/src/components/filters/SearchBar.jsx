@@ -1,11 +1,18 @@
 import { useState } from "react";
 
-const SearchBar = () => {
+const SearchBar = ({ filters, setFilters, fetchFilteredTasks }) => {
   const [searchText, setSearchText] = useState("");
 
   const handleSearch = () => {
-    if (searchText.trim()) { // Verifica si el input no está vacío
-      console.log(searchText);
+    if (searchText.trim()) { 
+      setFilters((prevFilters) => ({
+        ...prevFilters,
+        search: searchText, // Actualizar el filtro de status
+      }));
+      fetchFilteredTasks({
+        ...filters,
+        search: searchText, // Actualizar status en los filtros
+      });
     }
   };
 

@@ -1,11 +1,18 @@
 import { useState } from "react";
 
-const SearchDate = () => {
+const SearchDate = ({ filters, setFilters, fetchFilteredTasks }) => {
   const [selectedDate, setSelectedDate] = useState(null);
 
   const handleChange = (e) => {
     setSelectedDate(e.target.value);
-    console.log("Fecha seleccionada:", e.target.value);
+    setFilters((prevFilters) => ({
+      ...prevFilters,
+      expireDate: e.target.value, // Actualizar el filtro de status
+    }));
+    fetchFilteredTasks({
+      ...filters,
+      expireDate: e.target.value, // Actualizar status en los filtros
+    });
   };
 
   return (
