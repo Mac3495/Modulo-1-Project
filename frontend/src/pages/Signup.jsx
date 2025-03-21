@@ -1,17 +1,28 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 const Signup = () => {
+    const { signup, login } = useAuth();
     const navigate = useNavigate();
     const [userName, setUserName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log("User Name:", userName);
-        console.log("Email:", email);
-        console.log("Password:", password);
+
+        const response = await signup(userName, email, password);
+        if (response === 'success') {
+            const response = await login(email, password);
+            if (response === 'success') {
+                navigate("/home")
+            } else {
+                alert(response)
+            }
+        } else {
+            alert(response)
+        }
     };
 
     return (

@@ -5,9 +5,11 @@ import "./index.css";
 import Login from "./pages/login";
 import Signup from "./pages/Signup";
 import Home from "./pages/Home";
+import { AuthProvider } from "./context/AuthContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
+    <AuthProvider> 
     <Router>
       <Routes>
         <Route path="/login" element={<Login />} />
@@ -15,5 +17,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/home" element={<Home />} />
       </Routes>
     </Router>
+    </AuthProvider> 
   </React.StrictMode>
 );
