@@ -1,10 +1,6 @@
-import React from 'react';
+import CreateTaskButton from "./CreateTaskButton";
 
-const Empty = () => {
-  const handleCreateTask = () => {
-    console.log('Crear tarea');
-  };
-
+const Empty = ({ refreshTasks }) => {
   return (
     <div className="flex flex-col justify-center items-center h-[calc(100vh-80px)] text-white">
       <img 
@@ -13,12 +9,7 @@ const Empty = () => {
         className="mb-4"
       />
       <p className="text-lg">Aún no tienes tareas</p>
-      <button 
-        onClick={handleCreateTask}
-        className="bg-[#FFB433] text-white py-2 mt-4 px-6 rounded-lg hover:bg-[#e09e2c] transition"
-      >
-        Crear tarea
-      </button>
+      <CreateTaskButton refreshTasks={refreshTasks} />
     </div>
   );
 };

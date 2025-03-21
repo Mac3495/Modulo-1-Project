@@ -1,8 +1,10 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const GenericError = ({ errorMessage }) => {
+const GenericError = () => {
+  const navigate = useNavigate();
   const handleRetry = () => {
-    console.log("Reintentar");
+    navigate("/login")
   };
 
   return (
@@ -17,7 +19,7 @@ const GenericError = ({ errorMessage }) => {
         onClick={handleRetry}
         className="bg-[#FFB433] text-white py-2 px-4 rounded-lg hover:bg-[#e09e2c] transition"
       >
-        Reintentar
+        Iniciar sesión
       </button>
     </div>
   );
